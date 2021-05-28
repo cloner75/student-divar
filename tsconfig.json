@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "outDir": "./build",
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "allowJs": true,
+  },
+  "include": [
+    "src/**/*.ts",
+    "index.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode"
+  ]
+}
