@@ -3,7 +3,6 @@ import * as _ from "lodash";
 import { Request, Response } from "express";
 
 // Models
-import UserModel from "./../models/user";
 import CategoryModel from "../models/category";
 
 // Helper
@@ -58,9 +57,10 @@ class Category {
      */
     async delete(req: Request, res: Response) {
         try {
-            const deleted: any = await CategoryModel.deleteOne({ _id: req.params.id });
-            return res.send({ success: true, deleted });
+            await CategoryModel.deleteOne({ _id: req.params.id });
+            return res.send({ success: true });
         } catch (err) {
+            console.log(err);
             return res.status(500).send(err);
         }
     }
@@ -72,8 +72,8 @@ class Category {
      */
     async find(req: Request, res: Response) {
         try {
-            // const {} = ta inja
-            return res.send({ success: true });
+            const categories: any = await CategoryModel.find(req.query);
+            return res.send({ success: true, data: categories });
         } catch (err) {
             return res.status(500).send(err);
         }
