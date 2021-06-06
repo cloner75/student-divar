@@ -5,10 +5,7 @@ import * as timestamp from "mongoose-timestamp";
 
 const CateogrySchema = new Schema(
   {
-    name: { type: String, required: true, unique: true },
-    sub: [{
-      name: { type: String, unique: true },
-    }]
+    name: { type: String, required: true },
   },
   { versionKey: false }
 );
