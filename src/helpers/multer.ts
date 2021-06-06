@@ -8,14 +8,14 @@ import * as Jimp from "jimp";
 import mimeTypes from "./../configs/mimeTypes";
 const sizeOf = require("image-size");
 const LIMIT: number = 10;
-const UPLOAD: string = path.join(__dirname, "./../uploads/");
+const UPLOAD: string = path.join(__dirname, "./../../uploads/");
 
 // Functions
 
 /**
  * TODO Set Config Multer
  */
-export const config = () => {
+const config = () => {
   return multer({
     storage: multer.diskStorage({
       destination: (_req, _file, cb) => {
@@ -31,16 +31,16 @@ export const config = () => {
     },
     // Limits
     limits: { fileSize: LIMIT * 1024 * 1024 },
-  });
+  }).array('files', 10);
 };
 
 /**
  * TODO Upload Files
  */
-export const upload = (req) => {
+const upload = (req: any) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { files, body } = req;
+      const files = req.files;
       const { HOST } = process.env;
       const urls = [];
       for (let file of files) {
@@ -67,7 +67,6 @@ export const upload = (req) => {
           mimeType,
           size,
           typeFile,
-          typeReceive: body.type,
           encoding,
           destination,
           fieldname,
@@ -81,7 +80,7 @@ export const upload = (req) => {
               blur: `${HOST}${cdnFile}?type=blur`,
             },
           });
-          exports.resize(cdnFile);
+          resize(cdnFile);
         }
         urls.push(fileUrls);
       }
@@ -94,7 +93,7 @@ export const upload = (req) => {
 /**
  * TODO Set Resize Multer
  */
-export const resize = (cdnFile: string) => {
+const resize = (cdnFile: string) => {
   const { height, width } = sizeOf(UPLOAD.concat(cdnFile));
   const converLiset = [
     {
@@ -131,3 +130,5 @@ export const resize = (cdnFile: string) => {
     }
   });
 };
+
+export default { config, upload, resize };
