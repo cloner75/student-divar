@@ -1,15 +1,13 @@
 // Packages
 import { Schema, model } from "mongoose";
 import * as paginate from "mongoose-paginate";
-import * as timestamp from "mongoose-timestamp";
 
 const UploadSchema = new Schema(
   {
-    ownerId: { type: Schema.Types.ObjectId, required: false },
-    visionId: { type: Schema.Types.ObjectId, required: false }, // categoryId or ProductId or UserId
-    typeReceive: { type: String, required: true }, // 0 => category 1->product 2 => profile
-    fileName: { type: String, required: true, index: true },
+    cdnFile: { type: String, required: true, index: true },
+    cdnAddress: { type: String, required: true },
     typeFile: { type: String, required: true, index: true },
+    success: { type: Boolean, required: true },
     mimeType: { type: String, required: true },
     size: { type: String, required: true },
     path: { type: String, required: false },
@@ -24,8 +22,6 @@ const UploadSchema = new Schema(
       thumbnail: { type: String, required: false },
       blur: { type: String, required: false },
     },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
   },
   {
     versionKey: false
@@ -33,7 +29,6 @@ const UploadSchema = new Schema(
 );
 
 UploadSchema.plugin(paginate);
-UploadSchema.plugin(timestamp);
 
 const uploadModel = model("uploads", UploadSchema);
 uploadModel.createIndexes();
