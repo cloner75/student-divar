@@ -1,12 +1,16 @@
 // Routes
 import authorization from './authorization';
 import category from './category';
-import render from './render';
+import city from './city';
+import product from './product';
+import upload from './upload';
 
 // authorization(router, '/autorization?');
 
 export default {
     authorization,
     category,
-    render
+    city,
+    product,
+    upload
 };
