@@ -21,7 +21,7 @@ export default {
    * TODO Export Schema Create
    */
   signIn: Joi.object({
-    username: Joi.string().trim().required().messages(messages),
+    email: Joi.string().trim().required().messages(messages),
     password: Joi.string().trim().required().messages(messages),
   }),
 
