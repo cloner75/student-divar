@@ -74,13 +74,13 @@ var Authorization = /** @class */ (function () {
      */
     Authorization.prototype.signIn = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, username, passwordInput, checkUser, _b, password, rest, token, err_1;
+            var _a, email, passwordInput, checkUser, _b, password, rest, token, err_1;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
                         _c.trys.push([0, 2, , 3]);
-                        _a = req.body, username = _a.username, passwordInput = _a.password;
-                        return [4 /*yield*/, user_1.default.findOne({ username: username })];
+                        _a = req.body, email = _a.email, passwordInput = _a.password;
+                        return [4 /*yield*/, user_1.default.findOne({ email: email })];
                     case 1:
                         checkUser = _c.sent();
                         if (!checkUser || !bcrypt_1.compareSync(passwordInput, checkUser.password)) {
@@ -136,6 +136,35 @@ var Authorization = /** @class */ (function () {
                         console.log('signUp', err_2.message);
                         return [2 /*return*/, res.status(500).send(err_2.message)];
                     case 6: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * TODO Find One Controller
+     * @param {request} req
+     * @param {response} res
+     */
+    Authorization.prototype.find = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var checkUser, err_3;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, user_1.default.findOne({ _id: req.params.id })];
+                    case 1:
+                        checkUser = _a.sent();
+                        if (!checkUser) {
+                            return [2 /*return*/, res.status(404).send({ success: false, message: 'not found' })];
+                        }
+                        delete checkUser.password;
+                        return [2 /*return*/, res.status(200).send({ success: true, data: checkUser })];
+                    case 2:
+                        err_3 = _a.sent();
+                        console.log('signUp', err_3.message);
+                        return [2 /*return*/, res.status(500).send(err_3.message)];
+                    case 3: return [2 /*return*/];
                 }
             });
         });

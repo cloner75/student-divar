@@ -36,8 +36,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var fs = require("fs");
+var path = require("path");
 // Models
 var upload_1 = require("../models/upload");
+// Helper
+var multer_1 = require("../helpers/multer");
 // Consts
 var Consts;
 (function (Consts) {
@@ -57,17 +61,28 @@ var Upload = /** @class */ (function () {
      * @param {request} req
      * @param {response} res
      */
-    Upload.prototype.create = function (req, res) {
+    Upload.prototype.upload = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var created, err_1;
+            var files, err_1;
+            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, upload_1.default.create(req.body)];
+                        return [4 /*yield*/, multer_1.default.upload(req)];
                     case 1:
-                        created = _a.sent();
-                        return [2 /*return*/, res.send({ success: true, created: created })];
+                        files = _a.sent();
+                        files.map(function (item) { return __awaiter(_this, void 0, void 0, function () {
+                            return __generator(this, function (_a) {
+                                switch (_a.label) {
+                                    case 0: return [4 /*yield*/, upload_1.default.create(item)];
+                                    case 1:
+                                        _a.sent();
+                                        return [2 /*return*/];
+                                }
+                            });
+                        }); });
+                        return [2 /*return*/, res.send({ success: true, data: files })];
                     case 2:
                         err_1 = _a.sent();
                         return [2 /*return*/, res.status(500).send(err_1.message)];
@@ -77,88 +92,36 @@ var Upload = /** @class */ (function () {
         });
     };
     /**
-     * TODO Update Controller
+     * TODO Find One Controller
      * @param {request} req
      * @param {response} res
      */
-    Upload.prototype.update = function (req, res) {
+    Upload.prototype.show = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _id, updated, err_2;
+            var cdnFile, getFile_1, err_2;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        _id = req.params.id;
-                        return [4 /*yield*/, upload_1.default.findOneAndUpdate({ _id: _id }, { $set: req.body }, { new: true })];
+                        cdnFile = req.params.name;
+                        return [4 /*yield*/, upload_1.default.findOne({ cdnFile: cdnFile })];
                     case 1:
-                        updated = _a.sent();
-                        return [2 /*return*/, res.send({ success: true, updated: updated })];
+                        getFile_1 = _a.sent();
+                        if (!getFile_1) {
+                            return [2 /*return*/, res.status(404).send({ success: false })];
+                        }
+                        fs.readFile(path.join(__dirname, "./../../uploads/" + cdnFile), function (err, data) {
+                            if (err) {
+                                return res.status(500).send(err);
+                            }
+                            res.type(getFile_1.mimeType).send(data);
+                        });
+                        return [3 /*break*/, 3];
                     case 2:
                         err_2 = _a.sent();
                         return [2 /*return*/, res.status(500).send(err_2)];
                     case 3: return [2 /*return*/];
                 }
-            });
-        });
-    };
-    /**
-     * TODO Delete Controller
-     * @param {request} req
-     * @param {response} res
-     */
-    Upload.prototype.delete = function (req, res) {
-        return __awaiter(this, void 0, void 0, function () {
-            var deleted, err_3;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, upload_1.default.deleteOne({ _id: req.params.id })];
-                    case 1:
-                        deleted = _a.sent();
-                        return [2 /*return*/, res.send({ success: true, deleted: deleted })];
-                    case 2:
-                        err_3 = _a.sent();
-                        return [2 /*return*/, res.status(500).send(err_3)];
-                    case 3: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    /**
-     * TODO Find Controller
-     * @param {request} req
-     * @param {response} res
-     */
-    Upload.prototype.find = function (req, res) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                try {
-                    // const {} = ta inja
-                    return [2 /*return*/, res.send({ success: true })];
-                }
-                catch (err) {
-                    return [2 /*return*/, res.status(500).send(err)];
-                }
-                return [2 /*return*/];
-            });
-        });
-    };
-    /**
-     * TODO Find One Controller
-     * @param {request} req
-     * @param {response} res
-     */
-    Upload.prototype.findOne = function (req, res) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                try {
-                    return [2 /*return*/, res.send({ success: true })];
-                }
-                catch (err) {
-                    return [2 /*return*/, res.status(500).send(err)];
-                }
-                return [2 /*return*/];
             });
         });
     };

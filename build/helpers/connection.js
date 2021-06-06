@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 var body_parser_1 = require("body-parser");
 var cors = require("cors");
 var dotEnv = require("dotenv");
+var jwt_1 = require("./jwt");
 // Routes
 var routes_1 = require("../routes");
 /**
@@ -26,14 +27,23 @@ var Connection = /** @class */ (function () {
         this.app.use('/', this.express.static('view'));
         this.app.use(body_parser_1.json());
         this.app.use(body_parser_1.urlencoded({ extended: true }));
-        this.app.use(function (err, _req, res, next) {
+        this.app.use(function (err, req, res, next) {
             if (err) {
                 return res.sendStatus(400);
             }
             next();
         });
         this.app.use(cors());
-        // this.app.use(express.static("public"));
+        this.app.use(function (req, res, next) {
+            res.setHeader('Access-Control-Allow-Origin', '*');
+            res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+            res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+            res.setHeader('Access-Control-Allow-Credentials', true);
+            if (req.headers.authorization) {
+                req.user = jwt_1.verify(req.headers.authorization);
+            }
+            next();
+        });
     };
     ;
     /**
@@ -77,10 +87,10 @@ var Connection = /** @class */ (function () {
     ;
     Connection.prototype.Router = function () {
         this.app.use('/authorization', routes_1.default.authorization);
-        // this.app.use('/product', Router.authorization);
-        // this.app.use('/category', Router.authorization);
-        // this.app.use('/users', Router.authorization);
-        this.app.use('/pages', routes_1.default.render);
+        this.app.use('/category', routes_1.default.category);
+        this.app.use('/city', routes_1.default.city);
+        this.app.use('/product', routes_1.default.product);
+        this.app.use('/upload', routes_1.default.upload);
     };
     return Connection;
 }());

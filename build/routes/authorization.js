@@ -12,10 +12,12 @@ var Names;
 (function (Names) {
     Names["ROOT"] = "/signin";
     Names["PARAM"] = "/signup";
+    Names["FIND"] = "/:id";
 })(Names || (Names = {}));
 var Authorization = new authorization_1.default();
 router
     .post(Names.ROOT, authorization_2.signIn, Authorization.signIn)
-    .post(Names.PARAM, authorization_2.signUp, Authorization.signUp);
+    .post(Names.PARAM, authorization_2.signUp, Authorization.signUp)
+    .get(Names.FIND, Authorization.find);
 exports.default = router;
 //# sourceMappingURL=authorization.js.map

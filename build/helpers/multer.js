@@ -36,7 +36,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.resize = exports.upload = exports.config = void 0;
 // Package
 var multer = require("multer");
 var path = require("path");
@@ -46,7 +45,7 @@ var Jimp = require("jimp");
 var mimeTypes_1 = require("./../configs/mimeTypes");
 var sizeOf = require("image-size");
 var LIMIT = 10;
-var UPLOAD = path.join(__dirname, "./../uploads/");
+var UPLOAD = path.join(__dirname, "./../../uploads/");
 // Functions
 /**
  * TODO Set Config Multer
@@ -66,18 +65,17 @@ var config = function () {
         },
         // Limits
         limits: { fileSize: LIMIT * 1024 * 1024 },
-    });
+    }).array('files', 10);
 };
-exports.config = config;
 /**
  * TODO Upload Files
  */
 var upload = function (req) {
     return new Promise(function (resolve, reject) { return __awaiter(void 0, void 0, void 0, function () {
-        var files, body, HOST, urls, _i, files_1, file, cdnFile, fieldname, path_1, originalName, mimeType, size, encoding, destination, typeFile, fileUrls;
+        var files, HOST, urls, _i, files_1, file, cdnFile, fieldname, path_1, originalName, mimeType, size, encoding, destination, typeFile, fileUrls;
         return __generator(this, function (_a) {
             try {
-                files = req.files, body = req.body;
+                files = req.files;
                 HOST = process.env.HOST;
                 urls = [];
                 for (_i = 0, files_1 = files; _i < files_1.length; _i++) {
@@ -96,7 +94,6 @@ var upload = function (req) {
                         mimeType: mimeType,
                         size: size,
                         typeFile: typeFile,
-                        typeReceive: body.type,
                         encoding: encoding,
                         destination: destination,
                         fieldname: fieldname,
@@ -110,7 +107,7 @@ var upload = function (req) {
                                 blur: "" + HOST + cdnFile + "?type=blur",
                             },
                         });
-                        exports.resize(cdnFile);
+                        resize(cdnFile);
                     }
                     urls.push(fileUrls);
                 }
@@ -123,7 +120,6 @@ var upload = function (req) {
         });
     }); });
 };
-exports.upload = upload;
 /**
  * TODO Set Resize Multer
  */
@@ -165,5 +161,5 @@ var resize = function (cdnFile) {
         }
     });
 };
-exports.resize = resize;
+exports.default = { config: config, upload: upload, resize: resize };
 //# sourceMappingURL=multer.js.map

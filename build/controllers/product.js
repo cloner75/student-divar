@@ -1,4 +1,15 @@
 "use strict";
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -64,7 +75,7 @@ var Product = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
-                        return [4 /*yield*/, product_1.default.create(req.body)];
+                        return [4 /*yield*/, product_1.default.create(__assign(__assign({}, req.body), { userId: req.user._id }))];
                     case 1:
                         created = _a.sent();
                         return [2 /*return*/, res.send({ success: true, created: created })];
@@ -95,6 +106,7 @@ var Product = /** @class */ (function () {
                         return [2 /*return*/, res.send({ success: true, updated: updated })];
                     case 2:
                         err_2 = _a.sent();
+                        console.log(err_2);
                         return [2 /*return*/, res.status(500).send(err_2)];
                     case 3: return [2 /*return*/];
                 }
@@ -132,15 +144,20 @@ var Product = /** @class */ (function () {
      */
     Product.prototype.find = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
+            var products, err_4;
             return __generator(this, function (_a) {
-                try {
-                    // const {} = ta inja
-                    return [2 /*return*/, res.send({ success: true })];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, product_1.default.find(req.query).sort({ onTop: 'desc' })];
+                    case 1:
+                        products = _a.sent();
+                        return [2 /*return*/, res.send({ success: true, data: products })];
+                    case 2:
+                        err_4 = _a.sent();
+                        return [2 /*return*/, res.status(500).send(err_4)];
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    return [2 /*return*/, res.status(500).send(err)];
-                }
-                return [2 /*return*/];
             });
         });
     };
@@ -159,6 +176,52 @@ var Product = /** @class */ (function () {
                     return [2 /*return*/, res.status(500).send(err)];
                 }
                 return [2 /*return*/];
+            });
+        });
+    };
+    /**
+     * TODO Search Controller
+     * @param {request} req
+     * @param {response} res
+     */
+    Product.prototype.search = function (req, res) {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, title, priceMin, priceMax, categoryId, cityId, type, searchBox, getProduct, err_5;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        _a = req.query, title = _a.title, priceMin = _a.priceMin, priceMax = _a.priceMax, categoryId = _a.categoryId, cityId = _a.cityId, type = _a.type;
+                        searchBox = {
+                            status: { $ne: 0 },
+                            price: {
+                                $gte: +(priceMin - ((priceMin * 5) / 100)) || 0,
+                                $lte: +(+priceMax + ((+priceMax * 5) / 100)) || 50000000000,
+                            }
+                        };
+                        if (categoryId) {
+                            Object.assign(searchBox, { categoryId: categoryId });
+                        }
+                        if (cityId) {
+                            Object.assign(searchBox, { cityId: cityId });
+                        }
+                        if (type) {
+                            Object.assign(searchBox, { type: type });
+                        }
+                        if (title) {
+                            Object.assign(searchBox, {
+                                title: { $regex: new RegExp('.*' + title + '.*', "i") }
+                            });
+                        }
+                        return [4 /*yield*/, product_1.default.find(searchBox).sort({ onTop: 'desc' })];
+                    case 1:
+                        getProduct = _b.sent();
+                        return [2 /*return*/, res.send({ success: true, data: getProduct })];
+                    case 2:
+                        err_5 = _b.sent();
+                        return [2 /*return*/, res.status(500).send(err_5)];
+                    case 3: return [2 /*return*/];
+                }
             });
         });
     };

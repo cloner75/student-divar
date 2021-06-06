@@ -5,10 +5,7 @@ var mongoose_1 = require("mongoose");
 var paginate = require("mongoose-paginate");
 var timestamp = require("mongoose-timestamp");
 var CateogrySchema = new mongoose_1.Schema({
-    name: { type: String, required: true, unique: true },
-    sub: [{
-            name: { type: String, unique: true },
-        }]
+    name: { type: String, required: true },
 }, { versionKey: false });
 CateogrySchema.plugin(paginate);
 CateogrySchema.plugin(timestamp);

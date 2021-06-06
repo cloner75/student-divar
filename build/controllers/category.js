@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+// Models
 var category_1 = require("../models/category");
 // Consts
 var Consts;
@@ -107,17 +108,18 @@ var Category = /** @class */ (function () {
      */
     Category.prototype.delete = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var deleted, err_3;
+            var err_3;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, category_1.default.deleteOne({ _id: req.params.id })];
                     case 1:
-                        deleted = _a.sent();
-                        return [2 /*return*/, res.send({ success: true, deleted: deleted })];
+                        _a.sent();
+                        return [2 /*return*/, res.send({ success: true })];
                     case 2:
                         err_3 = _a.sent();
+                        console.log(err_3);
                         return [2 /*return*/, res.status(500).send(err_3)];
                     case 3: return [2 /*return*/];
                 }
@@ -131,15 +133,20 @@ var Category = /** @class */ (function () {
      */
     Category.prototype.find = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
+            var categories, err_4;
             return __generator(this, function (_a) {
-                try {
-                    // const {} = ta inja
-                    return [2 /*return*/, res.send({ success: true })];
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 2, , 3]);
+                        return [4 /*yield*/, category_1.default.find(req.query)];
+                    case 1:
+                        categories = _a.sent();
+                        return [2 /*return*/, res.send({ success: true, data: categories })];
+                    case 2:
+                        err_4 = _a.sent();
+                        return [2 /*return*/, res.status(500).send(err_4)];
+                    case 3: return [2 /*return*/];
                 }
-                catch (err) {
-                    return [2 /*return*/, res.status(500).send(err)];
-                }
-                return [2 /*return*/];
             });
         });
     };

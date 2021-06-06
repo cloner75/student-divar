@@ -3,13 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // Packages
 var mongoose_1 = require("mongoose");
 var paginate = require("mongoose-paginate");
-var timestamp = require("mongoose-timestamp");
 var UploadSchema = new mongoose_1.Schema({
-    ownerId: { type: mongoose_1.Schema.Types.ObjectId, required: false },
-    visionId: { type: mongoose_1.Schema.Types.ObjectId, required: false },
-    typeReceive: { type: String, required: true },
-    fileName: { type: String, required: true, index: true },
+    cdnFile: { type: String, required: true, index: true },
+    cdnAddress: { type: String, required: true },
     typeFile: { type: String, required: true, index: true },
+    success: { type: Boolean, required: true },
     mimeType: { type: String, required: true },
     size: { type: String, required: true },
     path: { type: String, required: false },
@@ -24,13 +22,10 @@ var UploadSchema = new mongoose_1.Schema({
         thumbnail: { type: String, required: false },
         blur: { type: String, required: false },
     },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
 }, {
     versionKey: false
 });
 UploadSchema.plugin(paginate);
-UploadSchema.plugin(timestamp);
 var uploadModel = mongoose_1.model("uploads", UploadSchema);
 uploadModel.createIndexes();
 exports.default = uploadModel;
