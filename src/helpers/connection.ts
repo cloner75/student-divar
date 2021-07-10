@@ -4,6 +4,7 @@ import { urlencoded, json } from "body-parser";
 import * as cors from "cors";
 import * as dotEnv from 'dotenv';
 import { verify } from './jwt';
+import CronJobs from './cronjobs';
 
 // Routes
 import Router from '../routes';
@@ -85,6 +86,7 @@ class Connection {
    * @param {string} message
    */
   startServer(): void {
+    new CronJobs();
     this.app.listen(process.env.PORT, () => {
       console.log(`App Is Running On Port: `, process.env.PORT);
       this.mongoConnection(process.env.MONGO_NAME, Number(process.env.MONGO_PORT), process.env.MONGO_HOST);
