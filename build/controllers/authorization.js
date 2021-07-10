@@ -74,7 +74,7 @@ var Authorization = /** @class */ (function () {
      */
     Authorization.prototype.signIn = function (req, res) {
         return __awaiter(this, void 0, void 0, function () {
-            var _a, email, passwordInput, checkUser, _b, password, rest, token, err_1;
+            var _a, email, passwordInput, checkUser, _b, password, rest, err_1;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
@@ -87,11 +87,7 @@ var Authorization = /** @class */ (function () {
                             return [2 /*return*/, res.sendStatus(404)];
                         }
                         _b = checkUser.toObject(), password = _b.password, rest = __rest(_b, ["password"]);
-                        token = jwt_1.signator(rest);
-                        // const token = jwt.sign(rest, process.env.SECRET_KEY_JWT, {
-                        //     expiresIn: "24h",
-                        // });
-                        return [2 /*return*/, res.send({ success: true, token: token })];
+                        return [2 /*return*/, res.send({ success: true, token: jwt_1.signator(rest), user: rest })];
                     case 2:
                         err_1 = _c.sent();
                         return [2 /*return*/, res.status(500).send(err_1)];
@@ -113,7 +109,6 @@ var Authorization = /** @class */ (function () {
                     case 0:
                         _c.trys.push([0, 5, , 6]);
                         _a = req.body, passwordInput = _a.password, email = _a.email;
-                        console.log({ email: email });
                         return [4 /*yield*/, user_1.default.findOne({ email: email })];
                     case 1:
                         checkUser = _c.sent();
@@ -126,6 +121,7 @@ var Authorization = /** @class */ (function () {
                         return [4 /*yield*/, bcrypt_1.hashSync(passwordInput, salt)];
                     case 3:
                         hash = _c.sent();
+                        console.log({ hash: hash });
                         return [4 /*yield*/, user_1.default.create({ email: email, password: hash })];
                     case 4:
                         register = _c.sent();
@@ -162,7 +158,6 @@ var Authorization = /** @class */ (function () {
                         return [2 /*return*/, res.status(200).send({ success: true, data: checkUser })];
                     case 2:
                         err_3 = _a.sent();
-                        console.log('signUp', err_3.message);
                         return [2 /*return*/, res.status(500).send(err_3.message)];
                     case 3: return [2 /*return*/];
                 }
