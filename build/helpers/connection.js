@@ -6,6 +6,7 @@ var body_parser_1 = require("body-parser");
 var cors = require("cors");
 var dotEnv = require("dotenv");
 var jwt_1 = require("./jwt");
+var cronjobs_1 = require("./cronjobs");
 // Routes
 var routes_1 = require("../routes");
 /**
@@ -79,6 +80,7 @@ var Connection = /** @class */ (function () {
      */
     Connection.prototype.startServer = function () {
         var _this = this;
+        new cronjobs_1.default();
         this.app.listen(process.env.PORT, function () {
             console.log("App Is Running On Port: ", process.env.PORT);
             _this.mongoConnection(process.env.MONGO_NAME, Number(process.env.MONGO_PORT), process.env.MONGO_HOST);
