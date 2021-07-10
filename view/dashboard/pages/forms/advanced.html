@@ -224,7 +224,7 @@
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
-          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">            
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" id="admin_menu" data-accordion="false">            
             <li class="nav-item has-treeview menu-open">
               <a href="#" class="nav-link active">
                 <i class="nav-icon fa fa-edit"></i>
@@ -243,54 +243,7 @@
                 <li class="nav-item">
                   <a href="../forms/advanced.html" class="nav-link">
                     <i class="fa fa-circle-o nav-icon"></i>
-                    <p>پیشرفته</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../forms/editors.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>ویشرایشگر</p>
-                  </a>
-                </li>
-              </ul>
-            </li>
-            <li class="nav-item has-treeview">
-              <a href="#" class="nav-link">
-                <i class="nav-icon fa fa-table"></i>
-                <p>
-                  جداول
-                  <i class="fa fa-angle-left right"></i>
-                </p>
-              </a>
-              <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="../tables/simple.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>جداول ساده</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../tables/data.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>جداول داده</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../tables/category.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>لیست دسته بندی ها</p>
-                  </a>
-                </li>     
-                <li class="nav-item">
-                  <a href="../tables/city.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>لیست شهر ها</p>
-                  </a>
-                </li>   
-                <li class="nav-item">
-                  <a href="../tables/adv.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>لیست آگهی ها</p>
+                    <p>آگهی جدید</p>
                   </a>
                 </li>
               </ul>
@@ -447,7 +400,43 @@
   <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
-
+<script>
+  const userType = localStorage.getItem('isUser'); 
+  if(userType && userType == 'false') {  
+          $('#admin_menu').append(`
+          <li class="nav-item has-treeview">
+              <a href="#" class="nav-link">
+                <i class="nav-icon fa fa-table"></i>
+                <p>
+                  جداول
+                  <i class="fa fa-angle-left right"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a href="../tables/category.html" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p>لیست دسته بندی ها</p>
+                  </a>
+                </li>     
+                <li class="nav-item">
+                  <a href="../tables/city.html" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p>لیست شهر ها</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="../tables/adv.html" class="nav-link">
+                    <i class="fa fa-circle-o nav-icon"></i>
+                    <p>لیست آگهی ها</p>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          
+          `)
+  }
+</script>
 <!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

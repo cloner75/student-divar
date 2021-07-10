@@ -30,12 +30,24 @@
      .then(products=>{
        let counter = 1;
         products.data.data.map(item=>{
+          let status = null;
+          switch(item.status){
+            case 0:
+              status = 'در انتظار تایید'
+              break;
+            case 1:
+              status = 'تایید شده'
+              break;
+            case 2:
+              status = 'منقضی'
+              break;
+          }
           $('#product_list').append(`
                 <tr>
                       <td>${counter++}</td>
                       <td><a href="./product.html?id=${item._id}">${item.title}</a></td>
+                      <td>${status}</td>
                       <td>${item.createdAt}</td>
-                      <td>${item.updatedAt}</td>
                       <td><button class="btn btn-danger" onClick="removeProduct('${item._id}')"> حذف </button></td>
                       <td><button class="btn btn-info" onClick="updateProduct('${item._id}')"> تایید </button></td>
                       <td><button class="btn btn-info" onClick="updateProductTop('${item._id}')"> نرده بان </button></td>
@@ -230,13 +242,7 @@
                 <li class="nav-item">
                   <a href="../forms/advanced.html" class="nav-link">
                     <i class="fa fa-circle-o nav-icon"></i>
-                    <p>پیشرفته</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../forms/editors.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>ویشرایشگر</p>
+                    <p>آگهی جدید</p>
                   </a>
                 </li>
               </ul>
@@ -250,18 +256,6 @@
                 </p>
               </a>
               <ul class="nav nav-treeview">
-                <li class="nav-item">
-                  <a href="../tables/simple.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>جداول ساده</p>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a href="../tables/data.html" class="nav-link">
-                    <i class="fa fa-circle-o nav-icon"></i>
-                    <p>جداول داده</p>
-                  </a>
-                </li>
                 <li class="nav-item">
                   <a href="../tables/category.html" class="nav-link">
                     <i class="fa fa-circle-o nav-icon"></i>
@@ -327,7 +321,7 @@
                 <tr>
                   <th>ردیف</th>
                   <th>سر تیتر</th>
-                  <th>تاریخ ایجاد</th>
+                  <th>وضعیت</th>
                   <th>تاریخ به روز رسانی</th>
                   <th colspan="3">مدیریت</th>
                 </tr>
