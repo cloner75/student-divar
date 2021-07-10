@@ -1,7 +1,6 @@
 // Packages
 import * as _ from "lodash";
 import { Request, Response } from "express";
-import * as jwt from "jsonwebtoken";
 import { compareSync, genSaltSync, hashSync } from 'bcrypt';
 
 // Models
@@ -38,11 +37,7 @@ class Authorization {
         return res.sendStatus(404);
       }
       const { password, ...rest } = checkUser.toObject();
-      const token = signator(rest);
-      // const token = jwt.sign(rest, process.env.SECRET_KEY_JWT, {
-      //     expiresIn: "24h",
-      // });
-      return res.send({ success: true, token });
+      return res.send({ success: true, token: signator(rest), user: rest });
     } catch (err) {
       return res.status(500).send(err);
     }
@@ -56,13 +51,13 @@ class Authorization {
   async signUp(req: Request, res: Response) {
     try {
       const { password: passwordInput, email } = req.body;
-      console.log({ email });
       const checkUser = await UserModel.findOne({ email });
       if (checkUser) {
         return res.status(408).send({ success: false, message: 'duplicated' });
       }
       const salt = await genSaltSync(Consts.saltRounds);
       const hash = await hashSync(passwordInput, salt);
+      console.log({ hash });
       const register: any = await UserModel.create({ email, password: hash });
       const { password, ...rest } = register.toObject();
       return res.status(200).send({ token: signator(rest) });
@@ -86,7 +81,6 @@ class Authorization {
       delete checkUser.password;
       return res.status(200).send({ success: true, data: checkUser });
     } catch (err) {
-      console.log('signUp', err.message);
       return res.status(500).send(err.message);
     }
   }
